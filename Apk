@@ -1,0 +1,315 @@
+# Combine the scripts into an HTML format for display on a webpage
+
+combined_code = """
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Combined Game Scripts</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background-color: #f4f4f9;
+
+            color: #333;
+
+            margin: 0;
+
+            padding: 20px;
+
+        }
+
+        pre {
+
+            background: #e8e8e8;
+
+            padding: 20px;
+
+            border-radius: 5px;
+
+            overflow-x: auto;
+
+        }
+
+        code {
+
+            font-family: Consolas, monospace;
+
+            font-size: 14px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Combined Game Scripts</h1>
+
+    <p>This file contains the combined scripts for the Player Controller, Enemy AI, and Health UI.</p>
+
+    <h2>Scripts</h2>
+
+    <pre><code>
+
+using UnityEngine;
+
+using UnityEngine.UI;
+
+
+
+// Player Controller Script
+
+public class PlayerController : MonoBehaviour
+
+{
+
+    public float speed = 5f;
+
+    public float jumpForce = 10f;
+
+    public int maxHealth = 100;
+
+
+
+    private Rigidbody2D rb;
+
+    private bool isGrounded = true;
+
+    public int currentHealth;
+
+
+
+    void Start()
+
+    {
+
+        rb = GetComponent<Rigidbody2D>();
+
+        currentHealth = maxHealth;
+
+    }
+
+
+
+    void Update()
+
+    {
+
+        Movement();
+
+        Attack();
+
+    }
+
+
+
+    void Movement()
+
+    {
+
+        float move = Input.GetAxis("Horizontal");
+
+        rb.velocity = new Vector2(move * speed, rb.velocity.y);
+
+
+
+        if (Input.GetButtonDown("Jump") && isGrounded)
+
+        {
+
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+
+            isGrounded = false;
+
+        }
+
+    }
+
+
+
+    void Attack()
+
+    {
+
+        if (Input.GetKeyDown(KeyCode.Z)) // Light attack
+
+        {
+
+            Debug.Log("Light Attack!");
+
+        }
+
+
+
+        if (Input.GetKeyDown(KeyCode.X)) // Heavy attack
+
+        {
+
+            Debug.Log("Heavy Attack!");
+
+        }
+
+    }
+
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+
+    {
+
+        if (collision.gameObject.CompareTag("Ground"))
+
+        {
+
+            isGrounded = true;
+
+        }
+
+    }
+
+
+
+    public void TakeDamage(int damage)
+
+    {
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+
+        {
+
+            Debug.Log("Player Defeated!");
+
+            Destroy(gameObject);
+
+        }
+
+    }
+
+}
+
+
+
+// Enemy AI Script
+
+public class EnemyAI : MonoBehaviour
+
+{
+
+    public float speed = 3f;
+
+    public int maxHealth = 50;
+
+    public Transform player;
+
+
+
+    private int currentHealth;
+
+
+
+    void Start()
+
+    {
+
+        currentHealth = maxHealth;
+
+    }
+
+
+
+    void Update()
+
+    {
+
+        ChasePlayer();
+
+    }
+
+
+
+    void ChasePlayer()
+
+    {
+
+        if (player != null)
+
+        {
+
+            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+
+        }
+
+    }
+
+
+
+    public void TakeDamage(int damage)
+
+    {
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+
+        {
+
+            Debug.Log("Enemy Defeated!");
+
+            Destroy(gameObject);
+
+        }
+
+    }
+
+}
+
+
+
+// Health UI Script
+
+public class HealthUI : MonoBehaviour
+
+{
+
+    public Slider playerHealthBar;
+
+    public PlayerController player;
+
+
+
+    void Update()
+
+    {
+
+        playerHealthBar.value = (float)player.currentHealth / player.maxHealth;
+
+    }
+
+}
+
+    </code></pre>
+
+</body>
+
+</html>
+
+"""
+
+
+
+
